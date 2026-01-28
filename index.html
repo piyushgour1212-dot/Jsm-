@@ -61,14 +61,15 @@ max-width:600px;margin:40px auto;
 background:rgba(255,255,255,.08);
 padding:40px;border-radius:30px
 }
-input{width:100%;padding:14px;margin:8px 0;border-radius:15px;border:none}
+input, select{width:100%;padding:14px;margin:8px 0;border-radius:15px;border:none}
 
 .members{display:flex;flex-wrap:wrap;gap:25px;justify-content:center;margin-top:30px}
 .member{
 width:260px;padding:18px;border-radius:25px;
-background:rgba(255,255,255,.1)
+background:rgba(255,255,255,.1);text-align:center;
+font-size:14px
 }
-.member img{width:100%;border-radius:15px}
+.member div.icon{font-size:60px;margin-bottom:10px}
 .active{outline:4px solid #22c55e}
 .warning{outline:4px solid yellow}
 .deactive{outline:4px solid red}
@@ -100,9 +101,9 @@ background:rgba(255,255,255,.1)
 
 <div id="programs" class="page">
 <section>
-<div class="card"><h2>Weight Management</h2><p>Structured fat loss with sustainable nutrition and workouts.</p></div>
-<div class="card"><h2>Nutrition Support</h2><p>Indian food based practical meal planning for health.</p></div>
-<div class="card"><h2>Personal Training</h2><p>Customized workouts with safety and results.</p></div>
+<div class="card"><h2>Weight Management</h2><p>Structured fat loss with sustainable nutrition and workouts. Lifestyle guidance and progress tracking included.</p></div>
+<div class="card"><h2>Nutrition Support</h2><p>Indian food based practical meal planning for energy, gut health, and immunity improvement.</p></div>
+<div class="card"><h2>Personal Training</h2><p>Customized workouts tailored to your body, focusing on strength, mobility, and safe progression.</p></div>
 </section>
 </div>
 
@@ -141,9 +142,12 @@ background:rgba(255,255,255,.1)
 <input id="dob" type="date">
 <input id="addr" placeholder="Address">
 <input id="city" placeholder="City">
-<input id="join" type="date">
-<input id="exp" type="date">
-<input id="mp" type="file">
+<select id="gender">
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+</select>
+<input id="join" type="date" placeholder="Joining Date">
+<input id="exp" type="date" placeholder="Expiry Date">
 <button type="button" class="btn" onclick="add()">Save</button>
 
 <h3 style="margin-top:30px">All Members</h3>
@@ -151,62 +155,60 @@ background:rgba(255,255,255,.1)
 </div>
 </div>
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import{getAuth,signInWithEmailAndPassword}from"https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import{getFirestore,collection,addDoc,getDocs,updateDoc,doc}from"https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/12.8.0/firebase-storage.js";
+<script>
+let membersData = JSON.parse(localStorage.getItem("members")) || [];
 
-const app=initializeApp({
-apiKey:"AIzaSyCyAcbizqOq4V9PIjtnp-spkpQx16MBMqw",
-authDomain:"ns-fitness-website.firebaseapp.com",
-projectId:"ns-fitness-website",
-storageBucket:"ns-fitness-website.firebasestorage.app",
-appId:"1:263723070366:web:fbf3921e9b8d68c4d45c8f"
-});
+window.login = () => {
+  if(email.value==="admin@gmail.com" && pass.value==="123456"){
+    loginBox.style.display="none";
+    panel.style.display="block";
+    load();
+  } else alert("Invalid credentials");
+};
 
-const auth=getAuth(app),db=getFirestore(app),st=getStorage(app);
+window.add = () => {
+  let member = {
+    name: mn.value,
+    mobile: mm.value,
+    dob: dob.value,
+    address: addr.value,
+    city: city.value,
+    gender: gender.value,
+    join: join.value,
+    expire: exp.value
+  };
+  membersData.push(member);
+  localStorage.setItem("members", JSON.stringify(membersData));
+  alert("Member Added");
+  load();
+};
 
-window.login=()=>signInWithEmailAndPassword(auth,email.value,pass.value)
-.then(()=>{loginBox.style.display="none";panel.style.display="block";load()})
-.catch(e=>alert(e.message));
-
-window.add=async()=>{
-try{
-let r=ref(st,"members/"+Date.now());
-await uploadBytes(r,mp.files[0]);
-let url=await getDownloadURL(r);
-await addDoc(collection(db,"members"),{
-name:mn.value,mobile:mm.value,dob:dob.value,address:addr.value,
-city:city.value,join:new Date(join.value),expire:new Date(exp.value),photo:url
-});
-alert("Member Added");
-load();
-}catch(e){alert(e.message)}
+function load(){
+  members.innerHTML="";
+  membersData.forEach((m,idx)=>{
+    let now = new Date();
+    let expDate = new Date(m.expire);
+    let diff = (expDate - now)/(1000*60*60*24);
+    let cls = diff<0 ? "deactive" : diff<=15 ? "warning" : "active";
+    let icon = m.gender=="Male" ? "👨" : "👩";
+    members.innerHTML+=`
+      <div class="member ${cls}">
+        <div class="icon">${icon}</div>
+        <h4>${m.name}</h4>
+        <p>Expire: ${expDate.toDateString()}</p>
+        <button onclick="renew(${idx})">Renew 1 Month</button>
+      </div>
+    `;
+  });
 }
 
-async function load(){
-members.innerHTML="";
-let s=await getDocs(collection(db,"members"));
-s.forEach(x=>{
-let m=x.data(),now=new Date(),exp=m.expire.toDate();
-let diff=(exp-now)/(1000*60*60*24);
-let cls=diff<0?"deactive":diff<=15?"warning":"active";
-members.innerHTML+=`
-<div class="member ${cls}">
-<img src="${m.photo}">
-<h4>${m.name}</h4>
-<p>Expire: ${exp.toDateString()}</p>
-<button onclick="renew('${x.id}')">Renew</button>
-</div>`;
-});
-}
-
-window.renew=async(id)=>{
-let d=new Date();d.setMonth(d.getMonth()+1);
-await updateDoc(doc(db,"members",id),{expire:d});
-load();
-}
+window.renew = (idx)=>{
+  let d = new Date(membersData[idx].expire);
+  d.setMonth(d.getMonth()+1);
+  membersData[idx].expire = d.toISOString().split("T")[0];
+  localStorage.setItem("members", JSON.stringify(membersData));
+  load();
+};
 </script>
 
 <script>
