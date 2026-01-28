@@ -71,7 +71,7 @@ transition:.5s
 
 /* admin */
 .login,.panel{
-max-width:520px;margin:40px auto;
+max-width:550px;margin:40px auto;
 background:rgba(255,255,255,.08);
 padding:40px;border-radius:30px;
 backdrop-filter:blur(25px)
@@ -80,7 +80,7 @@ input,textarea{
 width:100%;padding:14px;margin:10px 0;
 border-radius:15px;border:none
 }
-.members{display:flex;flex-wrap:wrap;gap:30px;justify-content:center}
+.members{display:flex;flex-wrap:wrap;gap:30px;justify-content:center;margin-top:40px}
 .member{
 width:270px;padding:20px;
 background:rgba(255,255,255,.1);
@@ -129,8 +129,7 @@ transition:.4s
 Our weight management program focuses on sustainable fat loss without starvation.
 We design calorie-balanced meal strategies combined with progressive workouts
 that boost metabolism, improve hormonal balance and maintain muscle mass.
-This program is ideal for people struggling with stubborn fat, slow metabolism
-or repeated weight regain. Lifestyle correction and weekly tracking ensure results.
+This program is ideal for people struggling with stubborn fat and repeated regain.
 </p>
 </div>
 
@@ -138,18 +137,17 @@ or repeated weight regain. Lifestyle correction and weekly tracking ensure resul
 <h2>Nutrition Support</h2>
 <p>
 Nutrition is the foundation of transformation. Our nutrition support includes
-custom meal planning, portion control education and realistic food choices.
-We focus on digestion, gut health and energy improvement while keeping Indian
-diet patterns in mind. No crash diets, only sustainable eating habits.
+custom meal planning, portion education and realistic Indian food choices.
+We improve digestion, gut health and energy without crash diets or supplements.
 </p>
 </div>
 
 <div class="card">
 <h2>Personal Training</h2>
 <p>
-Personal training offers structured workouts based on your body type, fitness
-level and injury history. Each session improves strength, mobility and endurance
-while minimizing injury risk. Ideal for fat loss, muscle building or rehabilitation.
+Personal training offers structured workouts based on body type and fitness level.
+Each session improves strength, mobility and endurance safely while reducing injury.
+Perfect for fat loss, muscle gain or rehabilitation goals.
 </p>
 </div>
 
@@ -180,6 +178,7 @@ while minimizing injury risk. Ideal for fat loss, muscle building or rehabilitat
 
 <!-- ADMIN -->
 <div id="admin" class="page">
+
 <div class="login" id="loginBox">
 <h2>Admin Login</h2>
 <input id="email" placeholder="Gmail">
@@ -200,9 +199,11 @@ while minimizing injury risk. Ideal for fat loss, muscle building or rehabilitat
 <input type="date" id="exp">
 <input type="file" id="mp">
 <button class="btn" onclick="add()">Save</button>
+
+<h3 style="margin-top:40px">All Members</h3>
+<div class="members" id="members"></div>
 </div>
 
-<div class="members" id="members"></div>
 </div>
 
 <!-- FIREBASE -->
@@ -224,11 +225,20 @@ const auth=getAuth(app),db=getFirestore(app),st=getStorage(app);
 
 window.login=()=>{
 signInWithEmailAndPassword(auth,email.value,pass.value)
-.then(()=>{loginBox.style.display="none";panel.style.display="block";load()})
+.then(()=>{
+loginBox.style.display="none";
+panel.style.display="block";
+load();
+})
 .catch(e=>alert(e.message))
 }
 
 window.add=async()=>{
+try{
+if(!mn.value||!mm.value||!join.value||!exp.value||mp.files.length===0){
+alert("Please fill all details");
+return;
+}
 let r=ref(st,"members/"+Date.now());
 await uploadBytes(r,mp.files[0]);
 let url=await getDownloadURL(r);
@@ -243,7 +253,9 @@ join:new Date(join.value),
 expire:new Date(exp.value),
 photo:url
 });
+alert("Member added");
 load();
+}catch(e){alert(e.message)}
 }
 
 async function load(){
@@ -251,10 +263,8 @@ members.innerHTML="";
 let s=await getDocs(collection(db,"members"));
 s.forEach(x=>{
 let m=x.data();
-let now=new Date();
-let diff=(m.expire.toDate()-now)/(1000*60*60*24);
+let diff=(m.expire.toDate()-new Date())/(1000*60*60*24);
 let cls=diff<=0?"red":diff<=15?"yellow":"green";
-
 members.innerHTML+=`
 <div class="member ${cls}">
 <img src="${m.photo}">
