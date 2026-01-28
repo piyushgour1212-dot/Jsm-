@@ -14,38 +14,29 @@ background:radial-gradient(circle at top,#022c22,#000);
 color:#e5fff6;
 overflow-x:hidden
 }
-
-/* animations */
 @keyframes fadeUp{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
 @keyframes glow{0%{box-shadow:0 0 20px #22c55e}50%{box-shadow:0 0 50px #4ade80}100%{box-shadow:0 0 20px #22c55e}}
-
 .page{display:none;animation:fadeUp .9s ease}
 .page.active{display:block}
 
-/* header */
 header{
 position:sticky;top:0;z-index:100;
 backdrop-filter:blur(15px);
 background:rgba(0,0,0,.6);
 padding:15px;
-display:flex;align-items:center;justify-content:space-between
+display:flex;justify-content:space-between;align-items:center
 }
 header h1{font-weight:800;color:#4ade80}
-nav a{
-margin:0 12px;cursor:pointer;
-font-weight:600;color:#d1fae5;
-transition:.3s
-}
+nav a{margin:0 12px;cursor:pointer;font-weight:600;color:#d1fae5}
 nav a:hover{color:#4ade80}
 
-/* hero */
 .hero{
 min-height:100vh;
 display:flex;align-items:center;justify-content:center;
 text-align:center;
 background:
 linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.9)),
-url('https://images.unsplash.com/photo-1558611848-73f7eb4001a1') center/cover
+url('https://images.unsplash.com/photo-1554284126-aa88f22d8b74') center/cover
 }
 .hero h2{font-size:52px;font-weight:800}
 .hero p{margin:20px auto;max-width:700px;font-size:18px}
@@ -57,41 +48,30 @@ cursor:pointer;color:#022c22;
 animation:glow 3s infinite
 }
 
-/* sections */
 section{padding:90px 20px;text-align:center}
 .card{
 max-width:900px;margin:40px auto;
 background:rgba(255,255,255,.05);
-border-radius:30px;
-padding:50px;
-backdrop-filter:blur(20px);
-transition:.5s
+border-radius:30px;padding:50px;
+backdrop-filter:blur(20px)
 }
-.card:hover{transform:translateY(-12px) scale(1.02)}
 
-/* admin */
 .login,.panel{
-max-width:550px;margin:40px auto;
+max-width:600px;margin:40px auto;
 background:rgba(255,255,255,.08);
-padding:40px;border-radius:30px;
-backdrop-filter:blur(25px)
+padding:40px;border-radius:30px
 }
-input,textarea{
-width:100%;padding:14px;margin:10px 0;
-border-radius:15px;border:none
-}
-.members{display:flex;flex-wrap:wrap;gap:30px;justify-content:center;margin-top:40px}
+input{width:100%;padding:14px;margin:8px 0;border-radius:15px;border:none}
+
+.members{display:flex;flex-wrap:wrap;gap:25px;justify-content:center;margin-top:30px}
 .member{
-width:270px;padding:20px;
-background:rgba(255,255,255,.1);
-border-radius:25px;
-transition:.4s
+width:260px;padding:18px;border-radius:25px;
+background:rgba(255,255,255,.1)
 }
 .member img{width:100%;border-radius:15px}
-.green{outline:4px solid #22c55e}
-.yellow{outline:4px solid #facc15}
-.red{outline:4px solid red}
-.member button{margin-top:10px;width:100%}
+.active{outline:4px solid #22c55e}
+.warning{outline:4px solid yellow}
+.deactive{outline:4px solid red}
 </style>
 </head>
 
@@ -108,7 +88,6 @@ transition:.4s
 </nav>
 </header>
 
-<!-- HOME -->
 <div id="home" class="page active">
 <div class="hero">
 <div>
@@ -119,94 +98,59 @@ transition:.4s
 </div>
 </div>
 
-<!-- PROGRAMS -->
 <div id="programs" class="page">
 <section>
-
-<div class="card">
-<h2>Weight Management</h2>
-<p>
-Our weight management program focuses on sustainable fat loss without starvation.
-We design calorie-balanced meal strategies combined with progressive workouts
-that boost metabolism, improve hormonal balance and maintain muscle mass.
-This program is ideal for people struggling with stubborn fat and repeated regain.
-</p>
-</div>
-
-<div class="card">
-<h2>Nutrition Support</h2>
-<p>
-Nutrition is the foundation of transformation. Our nutrition support includes
-custom meal planning, portion education and realistic Indian food choices.
-We improve digestion, gut health and energy without crash diets or supplements.
-</p>
-</div>
-
-<div class="card">
-<h2>Personal Training</h2>
-<p>
-Personal training offers structured workouts based on body type and fitness level.
-Each session improves strength, mobility and endurance safely while reducing injury.
-Perfect for fat loss, muscle gain or rehabilitation goals.
-</p>
-</div>
-
+<div class="card"><h2>Weight Management</h2><p>Structured fat loss with sustainable nutrition and workouts.</p></div>
+<div class="card"><h2>Nutrition Support</h2><p>Indian food based practical meal planning for health.</p></div>
+<div class="card"><h2>Personal Training</h2><p>Customized workouts with safety and results.</p></div>
 </section>
 </div>
 
-<!-- BMI -->
 <div id="bmi" class="page">
 <section class="card">
 <h2>BMI Calculator</h2>
-<input id="hgt" placeholder="Height (cm)">
-<input id="wgt" placeholder="Weight (kg)">
-<button class="btn" onclick="bmi()">Calculate</button>
+<input id="h" placeholder="Height (cm)">
+<input id="w" placeholder="Weight (kg)">
+<button type="button" class="btn" onclick="bmi()">Calculate</button>
 <p id="res"></p>
 </section>
 </div>
 
-<!-- CONTACT -->
 <div id="contact" class="page">
 <section class="card">
 <h2>Contact on WhatsApp</h2>
 <input id="n" placeholder="Name">
 <input id="c" placeholder="City">
 <input id="m" placeholder="Message">
-<button class="btn" onclick="wa()">Send</button>
+<button type="button" class="btn" onclick="wa()">Send</button>
 </section>
 </div>
 
-<!-- ADMIN -->
 <div id="admin" class="page">
-
 <div class="login" id="loginBox">
 <h2>Admin Login</h2>
 <input id="email" placeholder="Gmail">
 <input id="pass" type="password" placeholder="Password">
-<button class="btn" onclick="login()">Login</button>
+<button type="button" class="btn" onclick="login()">Login</button>
 </div>
 
 <div class="panel" id="panel" style="display:none">
 <h2>Add Member</h2>
 <input id="mn" placeholder="Name">
 <input id="mm" placeholder="Mobile">
-<input type="date" id="dob">
-<textarea id="addr" placeholder="Address"></textarea>
-<input id="city" value="Ujjain">
-<label>Joining Date</label>
-<input type="date" id="join">
-<label>Expire Date</label>
-<input type="date" id="exp">
-<input type="file" id="mp">
-<button class="btn" onclick="add()">Save</button>
+<input id="dob" type="date">
+<input id="addr" placeholder="Address">
+<input id="city" placeholder="City">
+<input id="join" type="date">
+<input id="exp" type="date">
+<input id="mp" type="file">
+<button type="button" class="btn" onclick="add()">Save</button>
 
-<h3 style="margin-top:40px">All Members</h3>
+<h3 style="margin-top:30px">All Members</h3>
 <div class="members" id="members"></div>
 </div>
-
 </div>
 
-<!-- FIREBASE -->
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import{getAuth,signInWithEmailAndPassword}from"https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
@@ -217,43 +161,26 @@ const app=initializeApp({
 apiKey:"AIzaSyCyAcbizqOq4V9PIjtnp-spkpQx16MBMqw",
 authDomain:"ns-fitness-website.firebaseapp.com",
 projectId:"ns-fitness-website",
-storageBucket:"ns-fitness-website.appspot.com",
+storageBucket:"ns-fitness-website.firebasestorage.app",
 appId:"1:263723070366:web:fbf3921e9b8d68c4d45c8f"
 });
 
 const auth=getAuth(app),db=getFirestore(app),st=getStorage(app);
 
-window.login=()=>{
-signInWithEmailAndPassword(auth,email.value,pass.value)
-.then(()=>{
-loginBox.style.display="none";
-panel.style.display="block";
-load();
-})
-.catch(e=>alert(e.message))
-}
+window.login=()=>signInWithEmailAndPassword(auth,email.value,pass.value)
+.then(()=>{loginBox.style.display="none";panel.style.display="block";load()})
+.catch(e=>alert(e.message));
 
 window.add=async()=>{
 try{
-if(!mn.value||!mm.value||!join.value||!exp.value||mp.files.length===0){
-alert("Please fill all details");
-return;
-}
 let r=ref(st,"members/"+Date.now());
 await uploadBytes(r,mp.files[0]);
 let url=await getDownloadURL(r);
-
 await addDoc(collection(db,"members"),{
-name:mn.value,
-mobile:mm.value,
-dob:dob.value,
-address:addr.value,
-city:city.value,
-join:new Date(join.value),
-expire:new Date(exp.value),
-photo:url
+name:mn.value,mobile:mm.value,dob:dob.value,address:addr.value,
+city:city.value,join:new Date(join.value),expire:new Date(exp.value),photo:url
 });
-alert("Member added");
+alert("Member Added");
 load();
 }catch(e){alert(e.message)}
 }
@@ -262,41 +189,30 @@ async function load(){
 members.innerHTML="";
 let s=await getDocs(collection(db,"members"));
 s.forEach(x=>{
-let m=x.data();
-let diff=(m.expire.toDate()-new Date())/(1000*60*60*24);
-let cls=diff<=0?"red":diff<=15?"yellow":"green";
+let m=x.data(),now=new Date(),exp=m.expire.toDate();
+let diff=(exp-now)/(1000*60*60*24);
+let cls=diff<0?"deactive":diff<=15?"warning":"active";
 members.innerHTML+=`
 <div class="member ${cls}">
 <img src="${m.photo}">
 <h4>${m.name}</h4>
-<p>${m.mobile}</p>
-<p>${m.city}</p>
-<p>Expire: ${m.expire.toDate().toDateString()}</p>
-<button onclick="renew('${x.id}')">Update +1 Month</button>
+<p>Expire: ${exp.toDateString()}</p>
+<button onclick="renew('${x.id}')">Renew</button>
 </div>`;
 });
 }
 
 window.renew=async(id)=>{
-let r=doc(db,"members",id);
 let d=new Date();d.setMonth(d.getMonth()+1);
-await updateDoc(r,{expire:d});
+await updateDoc(doc(db,"members",id),{expire:d});
 load();
 }
 </script>
 
 <script>
-function openPage(p){
-document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-document.getElementById(p).classList.add('active');
-}
-function bmi(){
-let h=hgt.value/100,w=wgt.value;
-res.innerText="BMI : "+(w/(h*h)).toFixed(1)
-}
-function wa(){
-open(`https://wa.me/919993901456?text=${n.value} ${c.value} ${m.value}`)
-}
+function openPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(p).classList.add('active')}
+function bmi(){let hh=h.value/100;res.innerText="BMI : "+(w.value/(hh*hh)).toFixed(1)}
+function wa(){open(`https://wa.me/919993901456?text=${n.value} ${c.value} ${m.value}`)}
 </script>
 
 </body>
