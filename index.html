@@ -65,14 +65,29 @@ input, select{width:100%;padding:14px;margin:8px 0;border-radius:15px;border:non
 
 .members{display:flex;flex-wrap:wrap;gap:25px;justify-content:center;margin-top:30px}
 .member{
-width:260px;padding:18px;border-radius:25px;
-background:rgba(255,255,255,.1);text-align:center;
-font-size:14px
+width:280px;padding:20px;border-radius:25px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(15px);
+box-shadow:0 0 15px rgba(0,0,0,0.5);
+color:#e5fff6;
+position:relative;
+transition:0.4s;
 }
-.member div.icon{font-size:60px;margin-bottom:10px}
-.active{outline:4px solid #22c55e}
-.warning{outline:4px solid yellow}
-.deactive{outline:4px solid red}
+.member:hover{transform:scale(1.03)}
+.member .icon{font-size:50px;margin-bottom:10px}
+.member h4{font-size:18px;margin-bottom:5px;font-weight:700}
+.member p{margin:3px 0;font-size:14px}
+.member button{
+margin-top:10px;padding:10px 18px;border-radius:25px;
+border:none;background:linear-gradient(135deg,#22c55e,#4ade80);
+color:#022c22;font-weight:700;cursor:pointer;
+transition:0.3s;
+}
+.member button:hover{transform:scale(1.05)}
+
+.active{border:4px solid #22c55e}
+.warning{border:4px solid yellow}
+.deactive{border:4px solid red}
 </style>
 </head>
 
@@ -195,8 +210,12 @@ function load(){
       <div class="member ${cls}">
         <div class="icon">${icon}</div>
         <h4>${m.name}</h4>
-        <p>Expire: ${expDate.toDateString()}</p>
-        <button onclick="renew(${idx})">Renew 1 Month</button>
+        <p>📞 ${m.mobile}</p>
+        <p>🎂 ${m.dob}</p>
+        <p>📍 ${m.address}, ${m.city}</p>
+        <p>📅 Joined: ${m.join}</p>
+        <p>⏳ Expiry: ${expDate.toDateString()}</p>
+        <button onclick="renew(${idx})">🔄 Extend Pass (+1 Month)</button>
       </div>
     `;
   });
